@@ -1,10 +1,11 @@
 # Roadmap
 
-## Fase 0 — Fondasi
-- [ ] Scaffold `backend/` (Laravel 12 + PostgreSQL + Sanctum + Spatie Permission)
-- [ ] Scaffold `frontend/` (React + TS + Vite + Tailwind + shadcn/ui + TanStack)
-- [ ] Kernel modul (registry, `module.json`, aktivasi modul)
-- [ ] Auth (login/logout), layout aplikasi, menu dinamis
+## Fase 0 — Fondasi ✅
+- [x] Scaffold `backend/` (Laravel 12 + PostgreSQL + Sanctum + Spatie Permission)
+- [x] Scaffold `frontend/` (React + TS + Vite + Tailwind + shadcn/ui + TanStack)
+- [x] Kernel modul (registry, `module.json`, aktivasi modul)
+- [x] Auth (login/logout), layout aplikasi, menu dinamis
+- [x] CI GitHub Actions (tes backend + lint/tes/build frontend)
 
 ## Fase 1 — Data master
 - [ ] Base: user, role, permission, profil perusahaan, sequence

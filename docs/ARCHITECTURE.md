@@ -59,7 +59,20 @@ modules/Sales/
 
 - Modul bisa diaktifkan / dinonaktifkan (tabel `modules`), dependensi dicek saat aktivasi.
 - Komunikasi antar modul lewat Service & Event (mis. `SalesOrderConfirmed` → Inventory membuat stock move).
-- Frontend membaca daftar modul aktif dari `/api/modules` untuk menampilkan menu.
+- Frontend membaca menu dari `/api/menu` (hanya modul aktif & item yang boleh diakses user)
+  dan daftar semua modul dari `/api/modules` (halaman Pengaturan → Modul).
+- Route semua modul selalu terdaftar; middleware `module:{Nama}` menolak (404) jika modul nonaktif.
+- Perintah: `php artisan module:list | module:enable | module:disable | module:sync`.
+
+## Autentikasi
+
+- Login `POST /api/auth/login` → token Sanctum (Bearer), disimpan frontend di localStorage.
+- `GET /api/auth/me` mengembalikan user + roles + permissions; role `super-admin` lolos semua izin.
+
+## Tampilan
+
+- Layar utama berisi ikon aplikasi per modul aktif (seperti Odoo).
+- Di dalam modul: bar atas berisi nama modul + menu item modul; menu user di kanan.
 
 ## Modul MVP
 
