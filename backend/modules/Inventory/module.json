@@ -1,0 +1,30 @@
+{
+    "name": "Inventory",
+    "slug": "inventory",
+    "label": "Inventori",
+    "description": "Gudang, lokasi, stok, dan perpindahan barang.",
+    "version": "0.1.0",
+    "required": false,
+    "sequence": 30,
+    "icon": "warehouse",
+    "depends": [
+        "Product"
+    ],
+    "menu": [
+        {
+            "label": "Stok",
+            "path": "/inventory/stock",
+            "permission": "inventory.stock.view"
+        },
+        {
+            "label": "Transfer",
+            "path": "/inventory/transfers",
+            "permission": "inventory.transfer.view"
+        },
+        {
+            "label": "Gudang",
+            "path": "/inventory/warehouses",
+            "permission": "inventory.warehouse.manage"
+        }
+    ]
+}

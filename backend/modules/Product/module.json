@@ -1,0 +1,28 @@
+{
+    "name": "Product",
+    "slug": "product",
+    "label": "Produk",
+    "description": "Produk, kategori, dan satuan (UoM).",
+    "version": "0.1.0",
+    "required": false,
+    "sequence": 20,
+    "icon": "package",
+    "depends": [],
+    "menu": [
+        {
+            "label": "Produk",
+            "path": "/products",
+            "permission": "product.product.view"
+        },
+        {
+            "label": "Kategori",
+            "path": "/products/categories",
+            "permission": "product.product.view"
+        },
+        {
+            "label": "Satuan",
+            "path": "/products/uom",
+            "permission": "product.product.manage"
+        }
+    ]
+}

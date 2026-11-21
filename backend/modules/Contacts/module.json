@@ -1,0 +1,18 @@
+{
+    "name": "Contacts",
+    "slug": "contacts",
+    "label": "Kontak",
+    "description": "Data pelanggan dan pemasok (partner).",
+    "version": "0.1.0",
+    "required": false,
+    "sequence": 10,
+    "icon": "users",
+    "depends": [],
+    "menu": [
+        {
+            "label": "Kontak",
+            "path": "/contacts",
+            "permission": "contacts.partner.view"
+        }
+    ]
+}

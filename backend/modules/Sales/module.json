@@ -1,0 +1,31 @@
+{
+    "name": "Sales",
+    "slug": "sales",
+    "label": "Penjualan",
+    "description": "Penawaran, pesanan penjualan, dan faktur pelanggan.",
+    "version": "0.1.0",
+    "required": false,
+    "sequence": 40,
+    "icon": "shopping-cart",
+    "depends": [
+        "Contacts",
+        "Inventory"
+    ],
+    "menu": [
+        {
+            "label": "Penawaran",
+            "path": "/sales/quotations",
+            "permission": "sales.order.view"
+        },
+        {
+            "label": "Pesanan",
+            "path": "/sales/orders",
+            "permission": "sales.order.view"
+        },
+        {
+            "label": "Faktur",
+            "path": "/sales/invoices",
+            "permission": "sales.invoice.view"
+        }
+    ]
+}

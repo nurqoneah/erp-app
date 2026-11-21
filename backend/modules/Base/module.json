@@ -1,0 +1,15 @@
+{
+    "name": "Base",
+    "slug": "base",
+    "label": "Pengaturan",
+    "description": "Inti aplikasi: autentikasi, pengguna, hak akses, dan manajemen modul.",
+    "version": "0.1.0",
+    "required": true,
+    "sequence": 1,
+    "icon": "settings",
+    "route_prefix": "",
+    "depends": [],
+    "menu": [
+        { "label": "Modul", "path": "/settings/modules", "permission": "base.module.manage" }
+    ]
+}

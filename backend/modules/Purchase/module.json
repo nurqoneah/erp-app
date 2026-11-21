@@ -1,0 +1,31 @@
+{
+    "name": "Purchase",
+    "slug": "purchase",
+    "label": "Pembelian",
+    "description": "Permintaan penawaran, pesanan pembelian, dan tagihan pemasok.",
+    "version": "0.1.0",
+    "required": false,
+    "sequence": 50,
+    "icon": "truck",
+    "depends": [
+        "Contacts",
+        "Inventory"
+    ],
+    "menu": [
+        {
+            "label": "RFQ",
+            "path": "/purchase/rfqs",
+            "permission": "purchase.order.view"
+        },
+        {
+            "label": "Pesanan Pembelian",
+            "path": "/purchase/orders",
+            "permission": "purchase.order.view"
+        },
+        {
+            "label": "Tagihan",
+            "path": "/purchase/bills",
+            "permission": "purchase.bill.view"
+        }
+    ]
+}
