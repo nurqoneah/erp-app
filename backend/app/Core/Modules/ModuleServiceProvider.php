@@ -7,6 +7,7 @@ use App\Core\Console\ModuleEnableCommand;
 use App\Core\Console\ModuleListCommand;
 use App\Core\Console\ModuleSyncCommand;
 use App\Core\Http\Middleware\EnsureModuleEnabled;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,6 +27,13 @@ class ModuleServiceProvider extends ServiceProvider
     public function boot(ModuleManager $modules): void
     {
         Route::aliasMiddleware('module', EnsureModuleEnabled::class);
+
+        // $table->auditColumns(): kolom created_by / updated_by (lihat HasAudit).
+        Blueprint::macro('auditColumns', function () {
+            /** @var Blueprint $this */
+            $this->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $this->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+        });
 
         foreach ($modules->all() as $module) {
             if (is_dir($module->migrationsPath())) {

@@ -10,6 +10,7 @@ final class Module
     /**
      * @param  list<string>  $depends
      * @param  list<array{label: string, path: string, permission?: string|null}>  $menu
+     * @param  list<class-string>  $seeders
      */
     public function __construct(
         public readonly string $name,
@@ -24,6 +25,7 @@ final class Module
         public readonly string $routePrefix,
         public readonly array $menu,
         public readonly string $path,
+        public readonly array $seeders = [],
     ) {}
 
     public static function fromManifest(string $path): self
@@ -45,6 +47,7 @@ final class Module
             routePrefix: $manifest['route_prefix'] ?? $slug,
             menu: array_values($manifest['menu'] ?? []),
             path: $path,
+            seeders: array_values($manifest['seeders'] ?? []),
         );
     }
 
@@ -56,6 +59,30 @@ final class Module
     public function routesFile(): string
     {
         return $this->path.'/routes/api.php';
+    }
+
+    /**
+     * Penomoran dokumen yang dideklarasikan modul (sequences.php):
+     * ['sales.order' => ['name' => 'Pesanan Penjualan', 'prefix' => 'SO/{YYYY}/', 'padding' => 4, 'reset' => 'yearly']].
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    public function sequences(): array
+    {
+        $file = $this->path.'/sequences.php';
+
+        return is_file($file) ? require $file : [];
+    }
+
+    /**
+     * Class seeder data awal modul (module.json "seeders"); dijalankan saat modul diaktifkan.
+     * Seeder harus idempoten (aman dijalankan berulang).
+     *
+     * @return list<class-string>
+     */
+    public function seeders(): array
+    {
+        return $this->seeders;
     }
 
     /**

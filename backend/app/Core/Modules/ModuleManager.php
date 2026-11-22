@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Modules\Base\Models\Sequence;
 use RuntimeException;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
@@ -101,7 +102,11 @@ class ModuleManager
                 }
                 $record->save();
 
-                $this->syncPermissions($module);
+                if ($record->enabled) {
+                    $this->install($module);
+                } else {
+                    $this->syncPermissions($module);
+                }
             }
 
             InstalledModule::query()->whereNotIn('name', $this->all()->keys())->delete();
@@ -126,7 +131,7 @@ class ModuleManager
                     $record->fill(['enabled' => true, 'version' => $module->version])->save();
                     $activated[] = $module->name;
                 }
-                $this->syncPermissions($module);
+                $this->install($module);
             }
         });
 
@@ -183,6 +188,31 @@ class ModuleManager
     public function flush(): void
     {
         Cache::forget(self::CACHE_KEY);
+    }
+
+    /**
+     * Pasang kelengkapan modul: permission, penomoran dokumen, dan data awal.
+     * Aman dipanggil berulang.
+     */
+    public function install(Module $module): void
+    {
+        $this->syncPermissions($module);
+
+        foreach ($module->sequences() as $code => $config) {
+            Sequence::query()->firstOrCreate(['code' => $code], [
+                'name' => $config['name'] ?? $code,
+                'prefix' => $config['prefix'] ?? '',
+                'suffix' => $config['suffix'] ?? '',
+                'padding' => $config['padding'] ?? 4,
+                'reset' => $config['reset'] ?? Sequence::RESET_YEARLY,
+                'next_number' => 1,
+                'module' => $module->name,
+            ]);
+        }
+
+        foreach ($module->seeders() as $seeder) {
+            app($seeder)->run();
+        }
     }
 
     private function syncPermissions(Module $module): void

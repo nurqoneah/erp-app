@@ -9,6 +9,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /** @mixin User */
 class UserResource extends JsonResource
 {
+    /** Sertakan daftar permission lengkap (untuk /auth/me). */
+    public bool $withPermissions = false;
+
+    public function withPermissions(): static
+    {
+        $this->withPermissions = true;
+
+        return $this;
+    }
+
     public function toArray(Request $request): array
     {
         return [
@@ -17,7 +27,8 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'is_active' => $this->is_active,
             'roles' => $this->getRoleNames(),
-            'permissions' => $this->getAllPermissions()->pluck('name'),
+            'permissions' => $this->when($this->withPermissions, fn () => $this->getAllPermissions()->pluck('name')),
+            'created_at' => $this->created_at,
         ];
     }
 }

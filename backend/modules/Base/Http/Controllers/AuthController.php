@@ -33,13 +33,13 @@ class AuthController extends Controller
 
         return response()->json([
             'token' => $token,
-            'user' => new UserResource($user),
+            'user' => (new UserResource($user))->withPermissions(),
         ]);
     }
 
     public function me(Request $request): UserResource
     {
-        return new UserResource($request->user());
+        return (new UserResource($request->user()))->withPermissions();
     }
 
     public function logout(Request $request): JsonResponse

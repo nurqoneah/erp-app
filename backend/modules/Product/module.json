@@ -24,5 +24,8 @@
             "path": "/products/uom",
             "permission": "product.product.manage"
         }
+    ],
+    "seeders": [
+        "Modules\\Product\\Database\\Seeders\\ProductSeeder"
     ]
 }

@@ -10,6 +10,33 @@
     "route_prefix": "",
     "depends": [],
     "menu": [
-        { "label": "Modul", "path": "/settings/modules", "permission": "base.module.manage" }
+        {
+            "label": "Pengguna",
+            "path": "/settings/users",
+            "permission": "base.user.view"
+        },
+        {
+            "label": "Role",
+            "path": "/settings/roles",
+            "permission": "base.role.manage"
+        },
+        {
+            "label": "Perusahaan",
+            "path": "/settings/company",
+            "permission": "base.setting.manage"
+        },
+        {
+            "label": "Penomoran",
+            "path": "/settings/sequences",
+            "permission": "base.setting.manage"
+        },
+        {
+            "label": "Modul",
+            "path": "/settings/modules",
+            "permission": "base.module.manage"
+        }
+    ],
+    "seeders": [
+        "Modules\\Base\\Database\\Seeders\\BaseSeeder"
     ]
 }
