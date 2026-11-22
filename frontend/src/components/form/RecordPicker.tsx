@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { useDebouncedValue } from '@/hooks/useDebouncedValue'
 import { cn } from '@/lib/utils'
 
-export type PickerOption = { id: number; label: string; hint?: string }
+export type PickerOption = { id: number; label: string; hint?: string; data?: Record<string, unknown> }
 
 type RecordPickerProps = {
   id?: string

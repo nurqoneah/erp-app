@@ -5,6 +5,8 @@ import type { ComponentType } from 'react'
  * `values` berisi semua field record (termasuk field tambahan dari modul perluasan).
  */
 export type FormExtensionProps = {
+  /** ID record yang sedang dibuka (kosong untuk record baru). */
+  recordId?: number
   values: Record<string, unknown>
   set: (field: string, value: unknown) => void
   errors: Record<string, string>

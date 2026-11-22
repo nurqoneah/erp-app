@@ -1,6 +1,7 @@
-import type { ModuleRoute } from '@/app/routes'
-import { ContactFormPage } from './pages/ContactFormPage'
-import { ContactsPage } from './pages/ContactsPage'
+import { lazyPage, type ModuleRoute } from '@/app/routes'
+
+const ContactFormPage = lazyPage(() => import('./pages/ContactFormPage'), 'ContactFormPage')
+const ContactsPage = lazyPage(() => import('./pages/ContactsPage'), 'ContactsPage')
 
 export const contactsRoutes: ModuleRoute[] = [
   { path: 'contacts', component: ContactsPage, permission: 'contacts.partner.view' },

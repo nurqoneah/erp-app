@@ -19,10 +19,18 @@
 - [x] Perluasan antar modul: field model, validasi, API, dan slot form frontend
 - [x] Contoh modul kustom "Keanggotaan" + panduan `docs/MODULES.md`
 
-## Fase 2 — Operasional
-- [ ] Inventory (gudang, lokasi, stock move, stok)
-- [ ] Sales (quotation, SO, delivery, invoice)
-- [ ] Purchase (RFQ, PO, receipt, bill)
+## Fase 2 — Operasional ✅
+- [x] Inventory: gudang & lokasi, stok per lokasi (jumlah saja), transfer (penerimaan, pengiriman, internal), penyesuaian stok
+- [x] Faktur (modul baru): faktur pelanggan, tagihan pemasok, posting, pembayaran sebagian/lunas
+- [x] Sales: penawaran → pesanan → pengiriman → faktur
+- [x] Purchase: RFQ → pesanan pembelian → penerimaan → tagihan
+- [x] Code splitting halaman per modul
+
+Catatan batasan Fase 2 (menyusul):
+- Nilai persediaan (FIFO / rata-rata) — bersama modul Akuntansi
+- Pengiriman / penerimaan sebagian (backorder)
+- Satuan beli berbeda dari satuan stok di baris pesanan (saat ini semua baris memakai satuan produk)
+- Daftar pajak terdefinisi (saat ini tarif pajak diisi per baris dalam %)
 
 ## Fase 3 — POS
 - [ ] Sesi kasir, layar kasir, pembayaran, struk, integrasi stok

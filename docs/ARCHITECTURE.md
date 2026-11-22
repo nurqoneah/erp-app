@@ -84,6 +84,23 @@ modules/Sales/
   `RecordPicker` (field relasi dengan pencarian), `Field`/`FormSection`, `ConfirmDialog`, `useFormState` (error 422 → field).
 - State list (pencarian, filter, halaman) disimpan di URL.
 
+## Alur antar modul (Fase 2)
+
+```
+Purchase ──konfirmasi──▶ Inventory: transfer penerimaan ──validasi──▶ event PickingDone ──▶ Purchase: qty_received
+         ──buat tagihan─▶ Invoicing: tagihan (in_invoice) ──ubah/posting/batal──▶ event InvoiceChanged ──▶ Purchase: qty_billed
+Sales    ──konfirmasi──▶ Inventory: transfer pengiriman ──validasi──▶ PickingDone ──▶ Sales: qty_delivered
+         ──buat faktur──▶ Invoicing: faktur (out_invoice) ──▶ InvoiceChanged ──▶ Sales: qty_invoiced
+```
+
+- Inventory & Invoicing tidak tahu apa-apa tentang Sales/Purchase. Dokumen menyimpan asalnya di
+  `origin_type` / `origin_id` (dan `origin_line_type` / `origin_line_id` per baris); listener di provider
+  Sales/Purchase memperbarui jumlahnya.
+- Hanya produk `storable` yang mengubah stok. `consumable` dicatat perpindahannya; `service` tidak bisa dipindahkan.
+- Validasi transfer gagal (422) bila stok di lokasi asal tidak cukup.
+- Nominal: float dibulatkan 2 desimal per baris (`App\Core\Support\LineAmounts`), sama seperti Odoo.
+- Pelanggaran aturan bisnis dilempar sebagai `App\Core\Exceptions\BusinessException` → HTTP 422 dengan pesan untuk user.
+
 ## Autentikasi
 
 - Login `POST /api/auth/login` → token Sanctum (Bearer), disimpan frontend di localStorage.
@@ -100,13 +117,14 @@ modules/Sales/
 1. **Base** — login, user, role/permission, profil perusahaan, penomoran dokumen (sequence), pengaturan.
 2. **Contacts** — partner (perorangan/perusahaan), alamat, flag customer/vendor.
 3. **Product** — produk (barang/jasa), kategori, satuan (UoM), harga jual/beli, barcode.
-4. **Inventory** — gudang, lokasi, stok (quant), perpindahan stok (receipt, delivery, adjustment).
-5. **Sales** — quotation → sales order → delivery → invoice.
-6. **Purchase** — RFQ → purchase order → receipt → vendor bill.
-7. **POS** — sesi kasir (buka/tutup), transaksi cepat, metode pembayaran, struk, mengurangi stok.
+4. **Inventory** — gudang, lokasi, stok (quant, jumlah saja), transfer (receipt, delivery, internal), penyesuaian stok.
+5. **Invoicing (Faktur)** — faktur pelanggan & tagihan pemasok, posting (nomor), pembayaran.
+6. **Sales** — penawaran → pesanan → pengiriman → faktur.
+7. **Purchase** — RFQ → pesanan pembelian → penerimaan → tagihan.
+8. **POS** — sesi kasir (buka/tutup), transaksi cepat, metode pembayaran, struk, mengurangi stok.
 
 Akuntansi penuh (jurnal, COA), HR, dan Manufaktur masuk tahap berikutnya.
-Untuk MVP, invoice/bill cukup dokumen dengan status (draft, posted, paid) dan pembayaran sederhana.
+Untuk MVP, faktur/tagihan adalah dokumen dengan status (draft, posted, cancelled) + status bayar, belum membuat jurnal akuntansi.
 
 ## Konvensi
 

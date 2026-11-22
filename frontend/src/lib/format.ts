@@ -15,3 +15,10 @@ export function formatNumber(value: string | number | null | undefined): string 
 export function formatDate(value: string | null | undefined): string {
   return value ? date.format(new Date(value)) : '-'
 }
+
+/** Tanggal hari ini (zona waktu lokal) dalam format YYYY-MM-DD untuk input type="date". */
+export function todayISO(): string {
+  const now = new Date()
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
+}

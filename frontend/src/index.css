@@ -78,4 +78,8 @@
   body {
     @apply bg-background text-foreground antialiased;
   }
+  /* Bawaan browser: fieldset tidak bisa menyusut di bawah lebar isinya (tabel lebar → halaman melebar). */
+  fieldset {
+    min-inline-size: 0;
+  }
 }

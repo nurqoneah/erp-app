@@ -1,11 +1,12 @@
-import type { ModuleRoute } from '@/app/routes'
-import { CompanyPage } from './pages/CompanyPage'
-import { ModulesPage } from './pages/ModulesPage'
-import { RoleFormPage } from './pages/RoleFormPage'
-import { RolesPage } from './pages/RolesPage'
-import { SequencesPage } from './pages/SequencesPage'
-import { UserFormPage } from './pages/UserFormPage'
-import { UsersPage } from './pages/UsersPage'
+import { lazyPage, type ModuleRoute } from '@/app/routes'
+
+const UsersPage = lazyPage(() => import('./pages/UsersPage'), 'UsersPage')
+const UserFormPage = lazyPage(() => import('./pages/UserFormPage'), 'UserFormPage')
+const RolesPage = lazyPage(() => import('./pages/RolesPage'), 'RolesPage')
+const RoleFormPage = lazyPage(() => import('./pages/RoleFormPage'), 'RoleFormPage')
+const CompanyPage = lazyPage(() => import('./pages/CompanyPage'), 'CompanyPage')
+const SequencesPage = lazyPage(() => import('./pages/SequencesPage'), 'SequencesPage')
+const ModulesPage = lazyPage(() => import('./pages/ModulesPage'), 'ModulesPage')
 
 export const baseRoutes: ModuleRoute[] = [
   { path: 'settings/users', component: UsersPage, permission: 'base.user.view' },

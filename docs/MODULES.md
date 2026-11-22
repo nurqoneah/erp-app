@@ -97,8 +97,10 @@ Aturan migration:
 
 ```ts
 // src/modules/loyalty/index.ts
-import type { FrontendModule } from '@/app/routes'
-import { PointsPage } from './pages/PointsPage'
+import { lazyPage, type FrontendModule } from '@/app/routes'
+
+// Halaman dimuat saat pertama dibuka (code splitting).
+const PointsPage = lazyPage(() => import('./pages/PointsPage'), 'PointsPage')
 
 export const loyaltyModule: FrontendModule = {
   name: 'Loyalty', // sama dengan backend
@@ -149,6 +151,19 @@ Untuk membuat model lain bisa diperluas, beri model itu trait `App\Core\Extensio
 `ModelExtensions::rules()` / `attributes()` di FormRequest-nya dan `ModelExtensions::values()` di Resource-nya
 (lihat `PartnerRequest` & `PartnerResource`).
 
+**Bereaksi terhadap modul lain lewat event.** Contoh di `SalesProvider`:
+
+```php
+Event::listen(PickingDone::class, function (PickingDone $event) {
+    if ($event->picking->origin_type === SalesOrder::ORIGIN) {
+        app(SalesOrderService::class)->refreshDelivered($event->picking->origin_id);
+    }
+});
+```
+
+Event yang tersedia: `Modules\Inventory\Events\PickingDone`, `Modules\Invoicing\Events\InvoiceChanged`.
+Karena provider hanya aktif saat modulnya terpasang, listener otomatis berhenti saat modul di-uninstall.
+
 Di provider Anda juga bisa memakai fitur Laravel biasa: menambah relasi
 (`Partner::resolveRelationUsing(...)`), mendengarkan event model, mendaftarkan listener, dan lain-lain.
 
@@ -168,6 +183,8 @@ ikut tersimpan bersama form. Slot yang tersedia:
 | Slot | Lokasi |
 |---|---|
 | `contacts.partner.form` | Form Kontak, sebelum Catatan |
-| `product.product.form` | Form Produk, sebelum Deskripsi |
+| `product.product.form` | Form Produk, sebelum Deskripsi (dipakai Inventori untuk "Stok tersedia") |
+
+Komponen slot juga menerima `recordId` (ID record yang sedang dibuka).
 
 Untuk menambah slot baru di sebuah form, letakkan `<ExtensionSlot point="..." ... />` di form tersebut.

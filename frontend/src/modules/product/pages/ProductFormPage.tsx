@@ -322,6 +322,7 @@ function ProductForm({ product, uomCategories, initial, initialCategory }: Produ
 
             <ExtensionSlot
               point="product.product.form"
+              recordId={productId}
               values={values as Record<string, unknown>}
               set={(field, value) => set(field as keyof ProductInput, value as never)}
               errors={errors}

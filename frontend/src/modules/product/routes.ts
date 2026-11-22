@@ -1,8 +1,9 @@
-import type { ModuleRoute } from '@/app/routes'
-import { CategoriesPage } from './pages/CategoriesPage'
-import { ProductFormPage } from './pages/ProductFormPage'
-import { ProductsPage } from './pages/ProductsPage'
-import { UomPage } from './pages/UomPage'
+import { lazyPage, type ModuleRoute } from '@/app/routes'
+
+const CategoriesPage = lazyPage(() => import('./pages/CategoriesPage'), 'CategoriesPage')
+const ProductFormPage = lazyPage(() => import('./pages/ProductFormPage'), 'ProductFormPage')
+const ProductsPage = lazyPage(() => import('./pages/ProductsPage'), 'ProductsPage')
+const UomPage = lazyPage(() => import('./pages/UomPage'), 'UomPage')
 
 export const productRoutes: ModuleRoute[] = [
   { path: 'products', component: ProductsPage, permission: 'product.product.view' },

@@ -280,6 +280,7 @@ function ContactForm({ partner, initial, initialParent }: { partner?: Partner; i
 
             <ExtensionSlot
               point="contacts.partner.form"
+              recordId={partnerId}
               values={values as Record<string, unknown>}
               set={(field, value) => set(field as keyof PartnerInput, value as never)}
               errors={errors}

@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { Link, Route, Routes, useLocation } from 'react-router'
 
 import { useAuth } from '@/app/auth'
@@ -48,7 +49,11 @@ function ModulePage({ route }: { route: ModuleRoute & { module: string } }) {
   if (!installed) return <Skeleton className="m-6 h-64" />
   if (!installed.has(route.module)) return <ModuleNotInstalled module={route.module} />
 
-  const page = <Page key={pathname} />
+  const page = (
+    <Suspense fallback={<Skeleton className="m-6 h-64" />}>
+      <Page key={pathname} />
+    </Suspense>
+  )
   return route.permission ? <RequirePermission permission={route.permission}>{page}</RequirePermission> : page
 }
 

@@ -118,3 +118,17 @@ export function useCreateUomCategory() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['uoms'] }),
   })
 }
+
+/**
+ * Pencarian produk untuk RecordPicker di baris dokumen.
+ * `filters` mis. { sold: 1 } atau { purchased: 1 }; `data` berisi harga, satuan, dan tipe produk.
+ */
+export async function searchProducts(term: string, filters: ListParams = {}): Promise<PickerOption[]> {
+  const { data } = await api.get<Page<Product>>(`${BASE}/products`, { params: cleanParams({ search: term, per_page: 20, ...filters }) })
+  return data.data.map((p) => ({
+    id: p.id,
+    label: p.sku ? `[${p.sku}] ${p.name}` : p.name,
+    hint: p.uom?.name,
+    data: { name: p.name, sale_price: p.sale_price, cost: p.cost, uom: p.uom?.name, type: p.type },
+  }))
+}
