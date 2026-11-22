@@ -2,20 +2,26 @@
     "name": "Pos",
     "slug": "pos",
     "label": "Point of Sale",
-    "description": "Kasir: sesi, transaksi, pembayaran, dan struk.",
+    "description": "Kasir: sesi buka/tutup dengan kontrol kas, transaksi, pembayaran, retur, dan struk.",
     "version": "0.1.0",
     "required": false,
     "sequence": 60,
     "icon": "monitor",
     "depends": [
         "Contacts",
-        "Inventory"
+        "Inventory",
+        "Invoicing"
     ],
     "menu": [
         {
-            "label": "Kasir",
+            "label": "Dasbor",
             "path": "/pos",
             "permission": "pos.session.use"
+        },
+        {
+            "label": "Pesanan",
+            "path": "/pos/orders",
+            "permission": "pos.order.view"
         },
         {
             "label": "Sesi",
@@ -23,9 +29,17 @@
             "permission": "pos.session.view"
         },
         {
-            "label": "Transaksi",
-            "path": "/pos/orders",
-            "permission": "pos.order.view"
+            "label": "Point of Sale",
+            "path": "/pos/configs",
+            "permission": "pos.config.manage"
+        },
+        {
+            "label": "Metode Pembayaran",
+            "path": "/pos/payment-methods",
+            "permission": "pos.config.manage"
         }
+    ],
+    "seeders": [
+        "Modules\\Pos\\Database\\Seeders\\PosSeeder"
     ]
 }

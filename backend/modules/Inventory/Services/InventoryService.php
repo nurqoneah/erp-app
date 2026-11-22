@@ -148,11 +148,12 @@ class InventoryService
     }
 
     /**
-     * Validasi transfer: stok berpindah. Gagal bila stok di lokasi asal tidak cukup.
+     * Validasi transfer: stok berpindah. Gagal bila stok di lokasi asal tidak cukup,
+     * kecuali $allowNegative (dipakai POS: seperti Odoo, kasir tidak diblokir walau stok kosong).
      */
-    public function validate(Picking $picking): Picking
+    public function validate(Picking $picking, bool $allowNegative = false): Picking
     {
-        DB::transaction(function () use ($picking) {
+        DB::transaction(function () use ($picking, $allowNegative) {
             $picking = Picking::query()->lockForUpdate()->findOrFail($picking->id);
             $this->ensureDraft($picking);
 
@@ -164,7 +165,7 @@ class InventoryService
                 throw new InventoryException('Lokasi asal dan tujuan tidak boleh sama.');
             }
 
-            $this->applyMoves($moves);
+            $this->applyMoves($moves, $allowNegative);
 
             $picking->update(['state' => Picking::STATE_DONE, 'done_at' => now()]);
         });
@@ -270,13 +271,13 @@ class InventoryService
     /**
      * @param  Collection<int, StockMove>  $moves
      */
-    private function applyMoves(Collection $moves): void
+    private function applyMoves(Collection $moves, bool $allowNegative = false): void
     {
         $shortages = [];
 
         foreach ($moves as $move) {
             if ($move->product->type === Product::TYPE_STORABLE) {
-                if ($move->sourceLocation->isInternal()) {
+                if ($move->sourceLocation->isInternal() && ! $allowNegative) {
                     $available = $this->quantityAt($move->product_id, $move->source_location_id, lock: true);
                     if ($available + 1e-9 < (float) $move->quantity) {
                         $shortages[] = sprintf(
@@ -288,6 +289,8 @@ class InventoryService
 
                         continue;
                     }
+                }
+                if ($move->sourceLocation->isInternal()) {
                     $this->changeQuant($move->product_id, $move->source_location_id, -(float) $move->quantity);
                 }
                 if ($move->destLocation->isInternal()) {

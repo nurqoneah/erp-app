@@ -39,14 +39,14 @@ class ModuleTest extends TestCase
 
         $this->postJson('/api/modules/Pos/install')
             ->assertOk()
-            ->assertJsonPath('installed', ['Contacts', 'Product', 'Inventory', 'Pos']);
+            ->assertJsonPath('installed', ['Contacts', 'Product', 'Inventory', 'Invoicing', 'Pos']);
 
         $this->assertTrue(Schema::hasTable('partners'));
         $this->assertTrue(Schema::hasTable('products'));
         $this->assertDatabaseHas('sequences', ['code' => 'pos.order']);
 
         $menu = collect($this->getJson('/api/menu')->assertOk()->json('data'))->pluck('module');
-        $this->assertEquals(['Base', 'Contacts', 'Product', 'Inventory', 'Pos'], $menu->all());
+        $this->assertEquals(['Base', 'Contacts', 'Product', 'Inventory', 'Invoicing', 'Pos'], $menu->all());
     }
 
     public function test_uninstall_plan_lists_dependents_first(): void
