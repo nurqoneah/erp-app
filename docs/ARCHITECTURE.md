@@ -64,10 +64,28 @@ modules/Sales/
 - Route semua modul selalu terdaftar; middleware `module:{Nama}` menolak (404) jika modul nonaktif.
 - Perintah: `php artisan module:list | module:enable | module:disable | module:sync`.
 
+## Fitur inti untuk modul
+
+- **Kolom audit:** `$table->auditColumns()` di migration + trait `HasAudit` di model → `created_by` / `updated_by` terisi otomatis.
+- **List standar:** `App\Core\Http\ListQuery::paginate()` mendukung `?search=`, `?sort=`, `?direction=`, `?per_page=`, `?page=`;
+  `ListQuery::filterActive()` untuk `?active=1|0|all` (arsip ala Odoo).
+- **Penomoran dokumen:** modul mendeklarasikan `sequences.php`; ambil nomor dengan
+  `app(SequenceService::class)->next('sales.order')` (aman untuk transaksi bersamaan, reset tahunan/bulanan).
+- **Data awal modul:** `"seeders"` di `module.json`, dijalankan saat modul diaktifkan (harus idempoten).
+
+## Frontend
+
+- Setiap modul punya `src/modules/{modul}/` berisi `api.ts` (hook TanStack Query), `types.ts`, `pages/`, dan `routes.ts`
+  (daftar halaman + permission). Router menggabungkan `routes.ts` semua modul.
+- Komponen bersama: `DataTable` (sort & paginasi server), `SearchInput`, `ArchiveFilter`, `PageHeader`,
+  `RecordPicker` (field relasi dengan pencarian), `Field`/`FormSection`, `ConfirmDialog`, `useFormState` (error 422 → field).
+- State list (pencarian, filter, halaman) disimpan di URL.
+
 ## Autentikasi
 
 - Login `POST /api/auth/login` → token Sanctum (Bearer), disimpan frontend di localStorage.
 - `GET /api/auth/me` mengembalikan user + roles + permissions; role `super-admin` lolos semua izin.
+- Role & permission selalu di guard `web` (lihat `User::$guard_name`), walau request memakai token Sanctum.
 
 ## Tampilan
 

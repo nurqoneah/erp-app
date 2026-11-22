@@ -63,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       logout,
       can: (permission) =>
-        !!user && (user.roles.includes(SUPER_ADMIN) || user.permissions.includes(permission)),
+        !!user && (user.roles.includes(SUPER_ADMIN) || (user.permissions ?? []).includes(permission)),
     }),
     [user, isLoading, login, logout],
   )

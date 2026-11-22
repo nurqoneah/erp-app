@@ -16,6 +16,12 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, HasRoles, Notifiable;
 
     /**
+     * Role & permission selalu memakai guard `web`, termasuk saat request
+     * diautentikasi lewat token Sanctum.
+     */
+    protected string $guard_name = 'web';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>

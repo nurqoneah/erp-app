@@ -29,3 +29,19 @@ export function GuestOnly({ children }: { children: ReactNode }) {
 
   return children
 }
+
+/** Tampilkan halaman hanya bila user punya permission tersebut. */
+export function RequirePermission({ permission, children }: { permission: string; children: ReactNode }) {
+  const { can } = useAuth()
+
+  if (!can(permission)) {
+    return (
+      <div className="px-4 py-24 text-center">
+        <h1 className="text-xl font-semibold">Akses ditolak</h1>
+        <p className="text-muted-foreground mt-1 text-sm">Anda tidak punya izin untuk membuka halaman ini.</p>
+      </div>
+    )
+  }
+
+  return children
+}

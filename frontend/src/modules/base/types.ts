@@ -4,7 +4,54 @@ export type User = {
   email: string
   is_active: boolean
   roles: string[]
-  permissions: string[]
+  /** Hanya ada di /auth/me. */
+  permissions?: string[]
+  created_at?: string
+}
+
+export type Role = {
+  id: number
+  name: string
+  is_system: boolean
+  permissions_count: number
+  users_count: number
+  permissions?: string[] | null
+}
+
+export type PermissionGroup = {
+  module: string
+  label: string
+  permissions: { name: string; label: string }[]
+}
+
+export type Company = {
+  id: number
+  name: string
+  legal_name: string | null
+  tax_id: string | null
+  email: string | null
+  phone: string | null
+  website: string | null
+  street: string | null
+  city: string | null
+  state: string | null
+  zip: string | null
+  country: string
+  currency: string
+}
+
+export type Sequence = {
+  id: number
+  code: string
+  name: string
+  module: string | null
+  module_label: string | null
+  prefix: string
+  suffix: string
+  padding: number
+  next_number: number
+  reset: 'never' | 'yearly' | 'monthly'
+  preview: string
 }
 
 export type ModuleInfo = {

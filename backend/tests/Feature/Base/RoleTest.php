@@ -37,6 +37,20 @@ class RoleTest extends TestCase
         ])->assertOk()->assertJsonPath('data.permissions_count', 2);
     }
 
+    public function test_list_roles_with_counts(): void
+    {
+        $this->admin();
+        $role = Role::create(['name' => 'Kasir', 'guard_name' => 'web']);
+        User::factory()->count(2)->create()->each->assignRole($role);
+
+        $roles = collect($this->getJson('/api/roles')->assertOk()->json('data'))->keyBy('name');
+
+        $this->assertSame(2, $roles['Kasir']['users_count']);
+        $this->assertSame(1, $roles['super-admin']['users_count']);
+        $this->assertTrue($roles['super-admin']['is_system']);
+        $this->getJson("/api/roles/{$role->id}")->assertOk()->assertJsonPath('data.users_count', 2);
+    }
+
     public function test_permissions_are_grouped_by_enabled_module(): void
     {
         $this->admin();

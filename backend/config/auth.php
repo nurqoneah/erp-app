@@ -42,6 +42,13 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Guard API (token Sanctum). Provider diisi agar paket lain (mis. Spatie Permission)
+        // tahu model user saat request memakai guard ini.
+        'sanctum' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+        ],
     ],
 
     /*

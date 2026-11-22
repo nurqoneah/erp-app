@@ -7,10 +7,11 @@
 - [x] Auth (login/logout), layout aplikasi, menu dinamis
 - [x] CI GitHub Actions (tes backend + lint/tes/build frontend)
 
-## Fase 1 — Data master
-- [ ] Base: user, role, permission, profil perusahaan, sequence
-- [ ] Contacts
-- [ ] Product (kategori, UoM)
+## Fase 1 — Data master ✅
+- [x] Base: user, role, permission, profil perusahaan, sequence
+- [x] Contacts
+- [x] Product (kategori, UoM)
+- [x] Pesan validasi Bahasa Indonesia
 
 ## Fase 2 — Operasional
 - [ ] Inventory (gudang, lokasi, stock move, stok)
