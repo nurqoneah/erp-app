@@ -4,6 +4,7 @@ import { contactsModule } from './contacts'
 import { inventoryModule } from './inventory'
 import { invoicingModule } from './invoicing'
 import { membershipModule } from './membership'
+import { posModule } from './pos'
 import { productModule } from './product'
 import { purchaseModule } from './purchase'
 import { salesModule } from './sales'
@@ -20,6 +21,7 @@ export const frontendModules: FrontendModule[] = [
   invoicingModule,
   salesModule,
   purchaseModule,
+  posModule,
   membershipModule,
 ]
 

@@ -32,8 +32,19 @@ Catatan batasan Fase 2 (menyusul):
 - Satuan beli berbeda dari satuan stok di baris pesanan (saat ini semua baris memakai satuan produk)
 - Daftar pajak terdefinisi (saat ini tarif pajak diisi per baris dalam %)
 
-## Fase 3 — POS
-- [ ] Sesi kasir, layar kasir, pembayaran, struk, integrasi stok
+## Fase 3 — POS (online) ✅ — alur mengikuti point_of_sale Odoo 19 Community
+- [x] Point of Sale (konfigurasi per toko/kasir): gudang, metode pembayaran, kepala/kaki struk, batas selisih kas
+- [x] Sesi: kontrol pembukaan (kas awal, saran dari penutupan sebelumnya) → berjalan → tutup (kas seharusnya vs terhitung, selisih; lewat batas hanya manajer)
+- [x] Kas masuk / keluar selama sesi
+- [x] Layar kasir layar penuh: grid produk + kategori, cari, scan barcode, numpad (Jml / % Disk / Harga), keranjang tersimpan di browser
+- [x] Pembayaran: split, kembalian (hanya tunai, dicatat sebagai pembayaran tunai negatif), opsi faktur (wajib pelanggan, langsung lunas)
+- [x] Stok berkurang real time dan boleh minus (seperti Odoo)
+- [x] Retur dari pesanan sebelumnya (maks. jumlah yang belum diretur, harga mengikuti pesanan asal, stok kembali)
+- [x] Struk siap cetak 80mm, cetak ulang
+- [x] Backend: dasbor POS, pesanan, sesi (ringkasan kas & pembayaran), konfigurasi, metode pembayaran
+
+Belum (menyusul, ada di Odoo): mode offline, kategori khusus POS, daftar harga, pajak per produk, multi-pesanan bersamaan,
+pembayaran "akun pelanggan" (bayar nanti), printer/terminal pembayaran, login karyawan (PIN).
 
 ## Berikutnya
 - Akuntansi (COA, jurnal, laporan), HR, Manufaktur, multi-company, laporan & dashboard

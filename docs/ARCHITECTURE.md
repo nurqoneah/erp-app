@@ -101,6 +101,24 @@ Sales    ──konfirmasi──▶ Inventory: transfer pengiriman ──validasi
 - Nominal: float dibulatkan 2 desimal per baris (`App\Core\Support\LineAmounts`), sama seperti Odoo.
 - Pelanggaran aturan bisnis dilempar sebagai `App\Core\Exceptions\BusinessException` → HTTP 422 dengan pesan untuk user.
 
+## POS (Fase 3)
+
+Mengikuti `point_of_sale` Odoo 19 Community (dipelajari dari source-nya, kode ditulis sendiri):
+
+```
+Dasbor POS ─buka─▶ sesi: opening_control ─kas awal─▶ opened ─tutup (kas terhitung)─▶ closed
+                                         │
+                          layar kasir: keranjang (localStorage) → bayar → POST pesanan
+                                         │
+     pos_orders (paid) ──▶ Inventory: transfer pengiriman/retur divalidasi saat itu juga (boleh stok minus)
+                       └─▶ Invoicing: faktur diposting & dilunasi bila "Faktur" dipilih (state → done)
+     tutup sesi ──▶ semua pesanan paid → done (diposting)
+```
+
+- Kembalian = baris `pos_payments` tunai negatif (`is_change`), sehingga kas seharusnya = kas awal + Σ pembayaran tunai + Σ kas masuk/keluar.
+- Retur = pesanan dengan jumlah negatif yang merujuk `refunded_line_id`; jumlah maksimal = jumlah asal − yang sudah diretur.
+- Satu sesi aktif per Point of Sale.
+
 ## Autentikasi
 
 - Login `POST /api/auth/login` → token Sanctum (Bearer), disimpan frontend di localStorage.

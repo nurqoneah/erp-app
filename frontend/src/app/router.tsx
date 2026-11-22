@@ -69,11 +69,18 @@ export function AppRoutes() {
         }
       />
       <Route element={<RequireAuth />}>
-        <Route element={<AppLayout />}>
-          <Route index element={<HomePage />} />
-          {moduleRoutes.map((route) => (
+        {moduleRoutes
+          .filter((route) => route.fullscreen)
+          .map((route) => (
             <Route key={route.path} path={route.path} element={<ModulePage route={route} />} />
           ))}
+        <Route element={<AppLayout />}>
+          <Route index element={<HomePage />} />
+          {moduleRoutes
+            .filter((route) => !route.fullscreen)
+            .map((route) => (
+              <Route key={route.path} path={route.path} element={<ModulePage route={route} />} />
+            ))}
           <Route path="*" element={<ComingSoonPage />} />
         </Route>
       </Route>

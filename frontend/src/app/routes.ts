@@ -6,6 +6,8 @@ export type ModuleRoute = {
   component: ComponentType
   /** Permission yang wajib dimiliki untuk membuka halaman. */
   permission?: string
+  /** Tampil layar penuh tanpa bar navigasi aplikasi (mis. layar kasir POS). */
+  fullscreen?: boolean
 }
 
 /**
