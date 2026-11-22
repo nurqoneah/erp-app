@@ -9,7 +9,8 @@
     "icon": "shopping-cart",
     "depends": [
         "Contacts",
-        "Inventory"
+        "Inventory",
+        "Invoicing"
     ],
     "menu": [
         {
@@ -21,11 +22,9 @@
             "label": "Pesanan",
             "path": "/sales/orders",
             "permission": "sales.order.view"
-        },
-        {
-            "label": "Faktur",
-            "path": "/sales/invoices",
-            "permission": "sales.invoice.view"
         }
+    ],
+    "providers": [
+        "Modules\\Sales\\Providers\\SalesProvider"
     ]
 }

@@ -9,7 +9,8 @@
     "icon": "truck",
     "depends": [
         "Contacts",
-        "Inventory"
+        "Inventory",
+        "Invoicing"
     ],
     "menu": [
         {
@@ -21,11 +22,9 @@
             "label": "Pesanan Pembelian",
             "path": "/purchase/orders",
             "permission": "purchase.order.view"
-        },
-        {
-            "label": "Tagihan",
-            "path": "/purchase/bills",
-            "permission": "purchase.bill.view"
         }
+    ],
+    "providers": [
+        "Modules\\Purchase\\Providers\\PurchaseProvider"
     ]
 }

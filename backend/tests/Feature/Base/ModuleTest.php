@@ -27,7 +27,7 @@ class ModuleTest extends TestCase
         $this->assertSame('installed', $modules['Base']['state']);
         $this->assertSame('uninstalled', $modules['Sales']['state']);
         $this->assertEqualsCanonicalizing(
-            ['Base', 'Contacts', 'Product', 'Inventory', 'Sales', 'Purchase', 'Pos', 'Membership'],
+            ['Base', 'Contacts', 'Product', 'Inventory', 'Invoicing', 'Sales', 'Purchase', 'Pos', 'Membership'],
             $modules->keys()->all(),
         );
         $this->assertFalse(Schema::hasTable('partners'));
@@ -56,7 +56,7 @@ class ModuleTest extends TestCase
 
         $this->getJson('/api/modules/Product/uninstall')
             ->assertOk()
-            ->assertJsonPath('data.*.name', ['Sales', 'Purchase', 'Inventory', 'Product']);
+            ->assertJsonPath('data.*.name', ['Sales', 'Purchase', 'Inventory', 'Invoicing', 'Product']);
     }
 
     public function test_uninstall_requires_confirmation(): void
@@ -78,15 +78,16 @@ class ModuleTest extends TestCase
 
         $this->postJson('/api/modules/Contacts/uninstall', ['confirm' => true])
             ->assertOk()
-            ->assertJsonPath('uninstalled', ['Sales', 'Contacts']);
+            ->assertJsonPath('uninstalled', ['Sales', 'Inventory', 'Invoicing', 'Contacts']);
 
         $this->assertFalse(Schema::hasTable('partners'));
         $this->assertDatabaseMissing('sequences', ['code' => 'sales.order']);
         $this->assertDatabaseMissing('permissions', ['name' => 'contacts.partner.view']);
         $this->assertSame([], $role->fresh()->permissions->pluck('name')->all());
 
-        // Inventori & Produk tidak bergantung pada Kontak, jadi tetap terpasang.
+        // Produk tidak bergantung pada Kontak, jadi tetap terpasang.
         $this->assertTrue(Schema::hasTable('products'));
+        $this->assertFalse(Schema::hasTable('stock_pickings'));
         $this->getJson('/api/contacts/partners')->assertNotFound();
 
         // Install ulang: tabel dibuat lagi dalam keadaan kosong.

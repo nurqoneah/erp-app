@@ -1,0 +1,16 @@
+{
+    "name": "Invoicing",
+    "slug": "invoicing",
+    "label": "Faktur",
+    "description": "Faktur pelanggan, tagihan pemasok, dan pencatatan pembayaran.",
+    "category": "Keuangan",
+    "version": "0.1.0",
+    "required": false,
+    "sequence": 35,
+    "icon": "receipt",
+    "depends": ["Contacts", "Product"],
+    "menu": [
+        { "label": "Faktur Pelanggan", "path": "/invoicing/customer-invoices", "permission": "invoicing.invoice.view" },
+        { "label": "Tagihan Pemasok", "path": "/invoicing/vendor-bills", "permission": "invoicing.invoice.view" }
+    ]
+}

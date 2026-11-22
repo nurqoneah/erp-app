@@ -8,7 +8,8 @@
     "sequence": 30,
     "icon": "warehouse",
     "depends": [
-        "Product"
+        "Product",
+        "Contacts"
     ],
     "menu": [
         {
@@ -22,9 +23,17 @@
             "permission": "inventory.transfer.view"
         },
         {
+            "label": "Penyesuaian",
+            "path": "/inventory/adjustments",
+            "permission": "inventory.adjustment.manage"
+        },
+        {
             "label": "Gudang",
             "path": "/inventory/warehouses",
             "permission": "inventory.warehouse.manage"
         }
+    ],
+    "seeders": [
+        "Modules\\Inventory\\Database\\Seeders\\InventorySeeder"
     ]
 }
