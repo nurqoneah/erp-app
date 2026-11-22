@@ -2,6 +2,7 @@
 
 namespace Modules\Contacts\Models;
 
+use App\Core\Extensions\Extensible;
 use App\Core\Models\Concerns\HasAudit;
 use Database\Factories\PartnerFactory;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 #[UseFactory(PartnerFactory::class)]
 class Partner extends Model
 {
-    use HasAudit, HasFactory, SoftDeletes;
+    use Extensible, HasAudit, HasFactory, SoftDeletes;
 
     public const TYPE_COMPANY = 'company';
 

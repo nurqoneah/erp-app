@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
 
 import { useAuth } from '@/app/auth'
+import { ExtensionSlot } from '@/components/ExtensionSlot'
 import { ConfirmDialog } from '@/components/data/ConfirmDialog'
 import { NotFound } from '@/components/data/NotFound'
 import { PageHeader } from '@/components/data/PageHeader'
@@ -318,6 +319,14 @@ function ProductForm({ product, uomCategories, initial, initialCategory }: Produ
                 </div>
               </FormSection>
             </div>
+
+            <ExtensionSlot
+              point="product.product.form"
+              values={values as Record<string, unknown>}
+              set={(field, value) => set(field as keyof ProductInput, value as never)}
+              errors={errors}
+              readOnly={readOnly}
+            />
 
             <FormSection title="Deskripsi">
               <Textarea {...text('description')} rows={3} aria-label="Deskripsi" />

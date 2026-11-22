@@ -2,6 +2,7 @@
 
 namespace Modules\Contacts\Http\Resources;
 
+use App\Core\Extensions\ModelExtensions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Contacts\Models\Partner;
@@ -39,6 +40,8 @@ class PartnerResource extends JsonResource
             'contacts' => PartnerResource::collection($this->whenLoaded('contacts')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            // Field tambahan dari modul lain (lihat ModuleProvider::extendModel()).
+            ...app(ModelExtensions::class)->values($this->resource),
         ];
     }
 }

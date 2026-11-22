@@ -18,7 +18,7 @@ class UomTest extends TestCase
     {
         parent::setUp();
         $this->admin();
-        $this->enableModules('Product');
+        $this->installModules('Product');
     }
 
     public function test_conversion_within_category(): void

@@ -18,7 +18,7 @@ class ProductTest extends TestCase
     {
         parent::setUp();
         $this->admin();
-        $this->enableModules('Product');
+        $this->installModules('Product');
     }
 
     private function uom(string $name): Uom

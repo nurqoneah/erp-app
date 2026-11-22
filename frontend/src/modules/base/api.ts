@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { api } from '@/lib/api'
@@ -41,21 +42,33 @@ export function useModules() {
   })
 }
 
-export function useToggleModule() {
+/** Nama modul yang terpasang (null selama masih dimuat). */
+export function useInstalledModules(): Set<string> | null {
+  const { data } = useModules()
+  return useMemo(() => (data ? new Set(data.filter((m) => m.installed).map((m) => m.name)) : null), [data])
+}
+
+type ModuleAction = 'install' | 'upgrade' | 'uninstall'
+
+export function useModuleAction() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ name, enable }: { name: string; enable: boolean }) => {
-      const { data } = await api.post<{ message: string; activated?: string[] }>(
-        `/modules/${name}/${enable ? 'enable' : 'disable'}`,
+    mutationFn: async ({ name, action }: { name: string; action: ModuleAction }) => {
+      const { data } = await api.post<{ message: string; installed?: string[]; uninstalled?: string[] }>(
+        `/modules/${name}/${action}`,
+        action === 'uninstall' ? { confirm: true } : undefined,
       )
       return data
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: baseKeys.modules })
-      queryClient.invalidateQueries({ queryKey: baseKeys.menu })
-    },
+    // Memasang / menghapus modul mengubah menu, izin, dan data: muat ulang semuanya.
+    onSuccess: () => queryClient.invalidateQueries(),
   })
+}
+
+export async function fetchUninstallPlan(name: string) {
+  const { data } = await api.get<{ data: { name: string; label: string }[] }>(`/modules/${name}/uninstall`)
+  return data.data
 }
 
 // ---------------------------------------------------------------------------

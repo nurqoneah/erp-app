@@ -77,7 +77,7 @@ class RoleController extends Controller
      */
     public function permissions(ModuleManager $modules): JsonResponse
     {
-        $groups = $modules->enabled()
+        $groups = $modules->installed()
             ->map(fn ($module) => [
                 'module' => $module->name,
                 'label' => $module->label,

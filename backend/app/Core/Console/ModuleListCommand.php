@@ -14,14 +14,21 @@ class ModuleListCommand extends Command
 
     public function handle(ModuleManager $modules): int
     {
+        $labels = [
+            ModuleManager::STATE_INSTALLED => 'terpasang',
+            ModuleManager::STATE_UNINSTALLED => '-',
+            ModuleManager::STATE_TO_UPGRADE => 'perlu upgrade',
+        ];
+
         $this->table(
-            ['Modul', 'Label', 'Versi', 'Dependensi', 'Status'],
+            ['Modul', 'Label', 'Versi', 'Terpasang', 'Dependensi', 'Status'],
             $modules->all()->map(fn (Module $m) => [
                 $m->name,
                 $m->label,
                 $m->version,
+                $modules->installedVersion($m) ?? '-',
                 implode(', ', $m->depends) ?: '-',
-                $modules->isEnabled($m->name) ? 'aktif' : 'nonaktif',
+                $labels[$modules->state($m)],
             ])->values()->all(),
         );
 

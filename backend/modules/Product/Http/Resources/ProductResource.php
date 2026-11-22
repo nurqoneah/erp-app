@@ -2,6 +2,7 @@
 
 namespace Modules\Product\Http\Resources;
 
+use App\Core\Extensions\ModelExtensions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Product\Models\Product;
@@ -38,6 +39,7 @@ class ProductResource extends JsonResource
             'is_active' => $this->is_active,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            ...app(ModelExtensions::class)->values($this->resource),
         ];
     }
 }

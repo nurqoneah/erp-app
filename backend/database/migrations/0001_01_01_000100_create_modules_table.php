@@ -11,8 +11,11 @@ return new class extends Migration
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('version')->nullable();
-            $table->boolean('enabled')->default(false);
+            // uninstalled | installed
+            $table->string('state', 20)->default('uninstalled');
+            // Versi module.json saat terakhir di-install / upgrade.
+            $table->string('installed_version')->nullable();
+            $table->timestamp('installed_at')->nullable();
             $table->timestamps();
         });
     }

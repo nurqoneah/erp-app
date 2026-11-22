@@ -30,7 +30,8 @@ erp-app/
 │       ├── Inventory/       # gudang, lokasi, stock move, stock quant
 │       ├── Sales/           # quotation, sales order, invoice
 │       ├── Purchase/        # RFQ, purchase order, vendor bill
-│       └── Pos/             # sesi kasir, order POS, pembayaran
+│       ├── Pos/             # sesi kasir, order POS, pembayaran
+│       └── Membership/      # contoh modul kustom yang memperluas Kontak
 ├── frontend/                # React SPA
 │   └── src/
 │       ├── app/             # router, layout, provider
@@ -57,12 +58,14 @@ modules/Sales/
 └── permissions.php          # daftar permission modul
 ```
 
-- Modul bisa diaktifkan / dinonaktifkan (tabel `modules`), dependensi dicek saat aktivasi.
+- Modul di-install / upgrade / uninstall seperti Apps di Odoo (status di tabel `modules`). Uninstall menghapus tabel & data modul permanen. Detail & cara membuat modul: [MODULES.md](MODULES.md).
+- Modul bisa memperluas modul lain (field model + slot form frontend) tanpa mengubah kodenya.
 - Komunikasi antar modul lewat Service & Event (mis. `SalesOrderConfirmed` → Inventory membuat stock move).
 - Frontend membaca menu dari `/api/menu` (hanya modul aktif & item yang boleh diakses user)
   dan daftar semua modul dari `/api/modules` (halaman Pengaturan → Modul).
-- Route semua modul selalu terdaftar; middleware `module:{Nama}` menolak (404) jika modul nonaktif.
-- Perintah: `php artisan module:list | module:enable | module:disable | module:sync`.
+- Route semua modul selalu terdaftar; middleware `module:{Nama}` menolak (404) jika modul belum terpasang.
+- Migration modul tidak ikut `php artisan migrate`; dijalankan saat install / upgrade.
+- Perintah: `php artisan module:list | module:install | module:upgrade | module:uninstall | module:sync`.
 
 ## Fitur inti untuk modul
 
@@ -71,7 +74,7 @@ modules/Sales/
   `ListQuery::filterActive()` untuk `?active=1|0|all` (arsip ala Odoo).
 - **Penomoran dokumen:** modul mendeklarasikan `sequences.php`; ambil nomor dengan
   `app(SequenceService::class)->next('sales.order')` (aman untuk transaksi bersamaan, reset tahunan/bulanan).
-- **Data awal modul:** `"seeders"` di `module.json`, dijalankan saat modul diaktifkan (harus idempoten).
+- **Data awal modul:** `"seeders"` di `module.json`, dijalankan saat modul di-install / upgrade (harus idempoten).
 
 ## Frontend
 

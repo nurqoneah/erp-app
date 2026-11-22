@@ -19,8 +19,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Modul
     Route::get('modules', [ModuleController::class, 'index'])->name('modules.index');
     Route::get('menu', [ModuleController::class, 'menu'])->name('menu');
-    Route::post('modules/{module}/enable', [ModuleController::class, 'enable'])->name('modules.enable');
-    Route::post('modules/{module}/disable', [ModuleController::class, 'disable'])->name('modules.disable');
+    Route::post('modules/{module}/install', [ModuleController::class, 'install'])->name('modules.install');
+    Route::post('modules/{module}/upgrade', [ModuleController::class, 'upgrade'])->name('modules.upgrade');
+    Route::get('modules/{module}/uninstall', [ModuleController::class, 'uninstallPlan'])->name('modules.uninstall-plan');
+    Route::post('modules/{module}/uninstall', [ModuleController::class, 'uninstall'])->name('modules.uninstall');
 
     // Pengguna
     Route::get('users', [UserController::class, 'index'])->middleware('can:base.user.view')->name('users.index');

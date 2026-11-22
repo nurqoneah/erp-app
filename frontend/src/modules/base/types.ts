@@ -54,16 +54,22 @@ export type Sequence = {
   preview: string
 }
 
+export type ModuleState = 'installed' | 'uninstalled' | 'to_upgrade'
+
 export type ModuleInfo = {
   name: string
   slug: string
   label: string
   description: string
+  category: string
+  author: string
   version: string
+  installed_version: string | null
   icon: string | null
   depends: string[]
   required: boolean
-  enabled: boolean
+  state: ModuleState
+  installed: boolean
 }
 
 export type MenuItem = { label: string; path: string }

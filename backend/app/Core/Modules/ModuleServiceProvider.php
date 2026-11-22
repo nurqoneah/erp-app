@@ -2,31 +2,35 @@
 
 namespace App\Core\Modules;
 
-use App\Core\Console\ModuleDisableCommand;
-use App\Core\Console\ModuleEnableCommand;
+use App\Core\Console\ModuleInstallCommand;
 use App\Core\Console\ModuleListCommand;
 use App\Core\Console\ModuleSyncCommand;
-use App\Core\Http\Middleware\EnsureModuleEnabled;
+use App\Core\Console\ModuleUninstallCommand;
+use App\Core\Console\ModuleUpgradeCommand;
+use App\Core\Extensions\ModelExtensions;
+use App\Core\Http\Middleware\EnsureModuleInstalled;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Throwable;
 
 /**
- * Memuat migration dan route dari setiap modul.
- *
- * Migration dan route semua modul selalu dimuat agar skema database konsisten;
- * akses ke route modul yang nonaktif ditolak oleh middleware `module:{Nama}`.
+ * Kernel modul:
+ * - route semua modul didaftarkan, tapi ditolak (404) oleh middleware `module:{Nama}` bila belum terpasang;
+ * - migration modul TIDAK ikut `php artisan migrate`; dijalankan saat modul di-install / upgrade;
+ * - service provider modul hanya didaftarkan bila modul terpasang.
  */
 class ModuleServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(ModuleManager::class, fn () => new ModuleManager(base_path('modules')));
+        $this->app->singleton(ModuleManager::class, fn ($app) => new ModuleManager(base_path('modules'), $app));
+        $this->app->singleton(ModelExtensions::class);
     }
 
     public function boot(ModuleManager $modules): void
     {
-        Route::aliasMiddleware('module', EnsureModuleEnabled::class);
+        Route::aliasMiddleware('module', EnsureModuleInstalled::class);
 
         // $table->auditColumns(): kolom created_by / updated_by (lihat HasAudit).
         Blueprint::macro('auditColumns', function () {
@@ -35,25 +39,31 @@ class ModuleServiceProvider extends ServiceProvider
             $this->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
         });
 
-        foreach ($modules->all() as $module) {
-            if (is_dir($module->migrationsPath())) {
-                $this->loadMigrationsFrom($module->migrationsPath());
+        if (! $this->app->routesAreCached()) {
+            foreach ($modules->all() as $module) {
+                if (is_file($module->routesFile())) {
+                    Route::middleware(['api', 'module:'.$module->name])
+                        ->prefix(trim('api/'.$module->routePrefix, '/'))
+                        ->name($module->slug.'.')
+                        ->group($module->routesFile());
+                }
             }
+        }
 
-            if (! $this->app->routesAreCached() && is_file($module->routesFile())) {
-                Route::middleware(['api', 'module:'.$module->name])
-                    ->prefix(trim('api/'.$module->routePrefix, '/'))
-                    ->name($module->slug.'.')
-                    ->group($module->routesFile());
-            }
+        try {
+            $modules->bootInstalledProviders();
+        } catch (Throwable $e) {
+            // Database belum siap (mis. saat `composer install`): lewati perluasan modul.
+            report($e);
         }
 
         if ($this->app->runningInConsole()) {
             $this->commands([
                 ModuleSyncCommand::class,
                 ModuleListCommand::class,
-                ModuleEnableCommand::class,
-                ModuleDisableCommand::class,
+                ModuleInstallCommand::class,
+                ModuleUninstallCommand::class,
+                ModuleUpgradeCommand::class,
             ]);
         }
     }

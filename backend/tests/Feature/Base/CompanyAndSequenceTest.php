@@ -43,7 +43,7 @@ class CompanyAndSequenceTest extends TestCase
         $this->admin();
         $this->assertDatabaseMissing('sequences', ['code' => 'sales.order']);
 
-        $this->enableModules('Sales');
+        $this->installModules('Sales');
 
         $sequences = collect($this->getJson('/api/sequences')->assertOk()->json('data'))->keyBy('code');
         $this->assertSame('SO/'.now()->year.'/0001', $sequences['sales.order']['preview']);
@@ -52,7 +52,7 @@ class CompanyAndSequenceTest extends TestCase
 
     public function test_sequence_numbers_increment_and_reset_yearly(): void
     {
-        $this->enableModules('Sales');
+        $this->installModules('Sales');
         $service = app(SequenceService::class);
 
         $this->assertSame('SO/2026/0001', $service->next('sales.order', Carbon::parse('2026-12-30')));
@@ -62,7 +62,7 @@ class CompanyAndSequenceTest extends TestCase
 
     public function test_monthly_sequence_with_placeholders(): void
     {
-        $this->enableModules('Pos');
+        $this->installModules('Pos');
         $service = app(SequenceService::class);
 
         $this->assertSame('POS/202611/00001', $service->next('pos.order', Carbon::parse('2026-11-05')));
@@ -73,7 +73,7 @@ class CompanyAndSequenceTest extends TestCase
     public function test_update_sequence_settings(): void
     {
         $this->admin();
-        $this->enableModules('Sales');
+        $this->installModules('Sales');
         $sequence = Sequence::query()->where('code', 'sales.order')->firstOrFail();
 
         $this->putJson("/api/sequences/{$sequence->id}", [

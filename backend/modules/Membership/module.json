@@ -1,0 +1,15 @@
+{
+    "name": "Membership",
+    "slug": "membership",
+    "label": "Keanggotaan",
+    "description": "Contoh modul kustom: menambah nomor member dan level keanggotaan ke Kontak tanpa mengubah kode modul Kontak.",
+    "category": "Contoh",
+    "author": "ERP App",
+    "version": "1.0.0",
+    "required": false,
+    "sequence": 90,
+    "icon": "badge",
+    "depends": ["Contacts"],
+    "providers": ["Modules\\Membership\\Providers\\MembershipProvider"],
+    "menu": []
+}

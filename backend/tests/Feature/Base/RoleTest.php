@@ -16,7 +16,7 @@ class RoleTest extends TestCase
     public function test_create_role_with_permissions_and_it_grants_access(): void
     {
         $this->admin();
-        $this->enableModules('Contacts');
+        $this->installModules('Contacts');
 
         $roleId = $this->postJson('/api/roles', [
             'name' => 'Staf Kontak',
@@ -58,7 +58,7 @@ class RoleTest extends TestCase
         $modules = collect($this->getJson('/api/permissions')->assertOk()->json('data'))->pluck('module');
         $this->assertEquals(['Base'], $modules->all());
 
-        $this->enableModules('Product');
+        $this->installModules('Product');
         $modules = collect($this->getJson('/api/permissions')->json('data'))->pluck('module');
         $this->assertEquals(['Base', 'Product'], $modules->all());
     }

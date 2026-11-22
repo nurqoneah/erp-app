@@ -1,27 +1,54 @@
-import { Route, Routes, useLocation } from 'react-router'
+import { Link, Route, Routes, useLocation } from 'react-router'
 
+import { useAuth } from '@/app/auth'
 import { GuestOnly, RequireAuth, RequirePermission } from '@/app/guards'
 import { AppLayout } from '@/app/layout/AppLayout'
 import type { ModuleRoute } from '@/app/routes'
+import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useInstalledModules, useModules } from '@/modules/base/api'
 import { ComingSoonPage } from '@/modules/base/pages/ComingSoonPage'
 import { HomePage } from '@/modules/base/pages/HomePage'
 import { LoginPage } from '@/modules/base/pages/LoginPage'
-import { baseRoutes } from '@/modules/base/routes'
-import { contactsRoutes } from '@/modules/contacts/routes'
-import { productRoutes } from '@/modules/product/routes'
+import { frontendModules, setupModules } from '@/modules/registry'
 
-/** Halaman dari semua modul frontend. Tambahkan modul baru di sini. */
-const moduleRoutes: ModuleRoute[] = [...baseRoutes, ...contactsRoutes, ...productRoutes]
+setupModules()
+
+const moduleRoutes = frontendModules.flatMap((module) => (module.routes ?? []).map((route) => ({ ...route, module: module.name })))
+
+function ModuleNotInstalled({ module }: { module: string }) {
+  const { can } = useAuth()
+  const { data: modules } = useModules()
+  const label = modules?.find((m) => m.name === module)?.label ?? module
+
+  return (
+    <div className="px-4 py-24 text-center">
+      <h1 className="text-xl font-semibold">Modul {label} belum terpasang</h1>
+      <p className="text-muted-foreground mt-1 text-sm">
+        {can('base.module.manage') ? 'Pasang modul ini lewat halaman Apps.' : 'Hubungi administrator untuk memasang modul ini.'}
+      </p>
+      {can('base.module.manage') && (
+        <Button asChild className="mt-6">
+          <Link to="/settings/modules">Buka Apps</Link>
+        </Button>
+      )}
+    </div>
+  )
+}
 
 /**
- * Render halaman modul. Diberi key = pathname agar form tidak membawa state lama
- * saat pindah dari /contacts/1 ke /contacts/new (komponen yang sama).
+ * Render halaman modul: cek modul terpasang & permission. Diberi key = pathname agar form
+ * tidak membawa state lama saat pindah dari /contacts/1 ke /contacts/new (komponen yang sama).
  */
-function ModulePage({ route }: { route: ModuleRoute }) {
+function ModulePage({ route }: { route: ModuleRoute & { module: string } }) {
   const { pathname } = useLocation()
+  const installed = useInstalledModules()
   const Page = route.component
-  const page = <Page key={pathname} />
 
+  if (!installed) return <Skeleton className="m-6 h-64" />
+  if (!installed.has(route.module)) return <ModuleNotInstalled module={route.module} />
+
+  const page = <Page key={pathname} />
   return route.permission ? <RequirePermission permission={route.permission}>{page}</RequirePermission> : page
 }
 

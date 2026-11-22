@@ -7,15 +7,15 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureModuleEnabled
+class EnsureModuleInstalled
 {
     public function __construct(private readonly ModuleManager $modules) {}
 
     public function handle(Request $request, Closure $next, string $module): Response
     {
-        if (! $this->modules->isEnabled($module)) {
+        if (! $this->modules->isInstalled($module)) {
             return response()->json([
-                'message' => "Modul [{$module}] belum diaktifkan.",
+                'message' => "Modul [{$module}] belum terpasang.",
             ], Response::HTTP_NOT_FOUND);
         }
 

@@ -13,7 +13,7 @@ class SequenceController extends Controller
 {
     public function index(ModuleManager $modules): JsonResponse
     {
-        $enabled = $modules->enabledNames();
+        $enabled = $modules->installedNames();
 
         $sequences = Sequence::query()
             ->where(fn ($q) => $q->whereNull('module')->orWhereIn('module', $enabled))

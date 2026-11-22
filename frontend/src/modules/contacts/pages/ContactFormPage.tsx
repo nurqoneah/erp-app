@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { toast } from 'sonner'
 
 import { useAuth } from '@/app/auth'
+import { ExtensionSlot } from '@/components/ExtensionSlot'
 import { ConfirmDialog } from '@/components/data/ConfirmDialog'
 import { NotFound } from '@/components/data/NotFound'
 import { PageHeader } from '@/components/data/PageHeader'
@@ -276,6 +277,14 @@ function ContactForm({ partner, initial, initialParent }: { partner?: Partner; i
                 </div>
               </FormSection>
             </div>
+
+            <ExtensionSlot
+              point="contacts.partner.form"
+              values={values as Record<string, unknown>}
+              set={(field, value) => set(field as keyof PartnerInput, value as never)}
+              errors={errors}
+              readOnly={readOnly}
+            />
 
             <FormSection title="Catatan">
               <Textarea {...text('notes')} rows={3} aria-label="Catatan" />

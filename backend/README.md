@@ -14,16 +14,18 @@ php artisan serve              # http://localhost:8000
 
 Login default: `admin@example.com` / `password` (ubah via `ADMIN_EMAIL` / `ADMIN_PASSWORD` sebelum seed).
 
-## Modul
-Setiap modul ada di `modules/{Nama}` dengan `module.json`, `permissions.php`,
-`routes/api.php`, dan `Database/Migrations`. Lihat `docs/ARCHITECTURE.md` di root repo.
+## Modul (Apps)
+Modul ada di `modules/{Nama}`. Install / uninstall lewat **Pengaturan → Modul** atau CLI:
 
 ```bash
 php artisan module:list
-php artisan module:enable Sales     # dependensi ikut aktif
-php artisan module:disable Sales
-php artisan module:sync             # setelah menambah modul / permission baru
+php artisan module:install Sales      # dependensi ikut terpasang
+php artisan module:upgrade            # jalankan migration baru modul terpasang
+php artisan module:uninstall Sales    # HAPUS PERMANEN data modul
 ```
+
+Migration modul tidak ikut `php artisan migrate`, tapi dijalankan saat install / upgrade.
+Panduan lengkap & cara membuat modul kustom: [`docs/MODULES.md`](../docs/MODULES.md).
 
 ## Tes
 Butuh database `erp_app_test` (lihat `phpunit.xml`).

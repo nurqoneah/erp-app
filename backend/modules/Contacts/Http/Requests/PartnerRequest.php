@@ -2,6 +2,7 @@
 
 namespace Modules\Contacts\Http\Requests;
 
+use App\Core\Extensions\ModelExtensions;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Modules\Contacts\Models\Partner;
@@ -14,6 +15,7 @@ class PartnerRequest extends FormRequest
         $partner = $this->route('partner');
 
         return [
+            ...app(ModelExtensions::class)->rules(Partner::class),
             'type' => ['required', Rule::in([Partner::TYPE_COMPANY, Partner::TYPE_PERSON])],
             'name' => ['required', 'string', 'max:255'],
             'parent_id' => [
@@ -46,6 +48,7 @@ class PartnerRequest extends FormRequest
     public function attributes(): array
     {
         return [
+            ...app(ModelExtensions::class)->attributes(Partner::class),
             'name' => 'nama',
             'parent_id' => 'perusahaan',
             'tax_id' => 'NPWP',

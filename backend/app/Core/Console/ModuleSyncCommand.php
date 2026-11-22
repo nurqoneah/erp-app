@@ -9,7 +9,7 @@ class ModuleSyncCommand extends Command
 {
     protected $signature = 'module:sync';
 
-    protected $description = 'Daftarkan modul di folder modules/ ke database dan sinkronkan permission-nya';
+    protected $description = 'Daftarkan modul baru di folder modules/ dan pasang modul wajib';
 
     public function handle(ModuleManager $modules): int
     {

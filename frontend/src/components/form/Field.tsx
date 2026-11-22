@@ -34,7 +34,7 @@ export function Field({ label, htmlFor, error, hint, required, className, childr
 
 export function FormSection({ title, children, className }: { title?: string; children: ReactNode; className?: string }) {
   return (
-    <section className={cn('grid gap-4', className)}>
+    <section className={cn('grid content-start gap-4', className)}>
       {title && <h2 className="text-muted-foreground border-b pb-1 text-xs font-semibold tracking-wide uppercase">{title}</h2>}
       {children}
     </section>

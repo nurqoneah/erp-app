@@ -1,4 +1,5 @@
 import {
+  BadgeCheck,
   Boxes,
   LayoutGrid,
   Monitor,
@@ -20,6 +21,7 @@ const icons: Record<string, LucideIcon> = {
   truck: Truck,
   monitor: Monitor,
   boxes: Boxes,
+  badge: BadgeCheck,
 }
 
 export function moduleIcon(name?: string | null): LucideIcon {
@@ -35,6 +37,7 @@ const tones: Record<string, string> = {
   'shopping-cart': 'bg-emerald-500',
   truck: 'bg-violet-500',
   monitor: 'bg-rose-500',
+  badge: 'bg-teal-500',
 }
 
 export function moduleTone(name?: string | null): string {

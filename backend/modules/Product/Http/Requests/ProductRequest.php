@@ -2,6 +2,7 @@
 
 namespace Modules\Product\Http\Requests;
 
+use App\Core\Extensions\ModelExtensions;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
@@ -27,6 +28,7 @@ class ProductRequest extends FormRequest
             ->whereNull('deleted_at');
 
         return [
+            ...app(ModelExtensions::class)->rules(Product::class),
             'name' => ['required', 'string', 'max:255'],
             'sku' => ['nullable', 'string', 'max:64', $unique('sku')],
             'barcode' => ['nullable', 'string', 'max:64', $unique('barcode')],
@@ -65,6 +67,7 @@ class ProductRequest extends FormRequest
     public function attributes(): array
     {
         return [
+            ...app(ModelExtensions::class)->attributes(Product::class),
             'name' => 'nama produk',
             'sku' => 'kode internal',
             'category_id' => 'kategori',

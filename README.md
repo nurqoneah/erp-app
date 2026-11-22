@@ -4,6 +4,7 @@ Aplikasi ERP (terinspirasi Odoo) dengan Laravel (backend API) + React (frontend 
 
 - Arsitektur & keputusan desain: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - Roadmap: [docs/ROADMAP.md](docs/ROADMAP.md)
+- Membuat & memperluas modul (Apps): [docs/MODULES.md](docs/MODULES.md)
 
 Modul MVP: Base, Contacts, Product, Inventory, Sales, Purchase, POS.
 
@@ -32,4 +33,4 @@ npm install
 npm run dev
 ```
 
-Login: `admin@example.com` / `password`. Aktifkan modul di **Pengaturan → Modul**.
+Login: `admin@example.com` / `password`. Install modul di **Pengaturan → Modul**.

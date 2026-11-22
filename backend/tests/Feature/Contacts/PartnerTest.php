@@ -22,7 +22,7 @@ class PartnerTest extends TestCase
     public function test_crud_company_with_person_contact(): void
     {
         $this->admin();
-        $this->enableModules('Contacts');
+        $this->installModules('Contacts');
 
         $companyId = $this->postJson('/api/contacts/partners', [
             'type' => 'company',
@@ -52,7 +52,7 @@ class PartnerTest extends TestCase
     public function test_person_cannot_be_parent_and_company_cannot_have_parent(): void
     {
         $this->admin();
-        $this->enableModules('Contacts');
+        $this->installModules('Contacts');
         $person = Partner::factory()->person()->create();
         $company = Partner::factory()->create();
 
@@ -65,7 +65,7 @@ class PartnerTest extends TestCase
     public function test_filters(): void
     {
         $this->admin();
-        $this->enableModules('Contacts');
+        $this->installModules('Contacts');
         Partner::factory()->create(['name' => 'Toko Andalas', 'city' => 'Padang']);
         Partner::factory()->vendor()->create(['name' => 'CV Pemasok']);
         Partner::factory()->create(['name' => 'Lama', 'is_active' => false]);
@@ -81,7 +81,7 @@ class PartnerTest extends TestCase
     public function test_search_escapes_wildcards(): void
     {
         $this->admin();
-        $this->enableModules('Contacts');
+        $this->installModules('Contacts');
         Partner::factory()->create(['name' => 'Diskon 100%']);
         Partner::factory()->create(['name' => 'Biasa']);
 

@@ -27,10 +27,10 @@ abstract class TestCase extends BaseTestCase
         return $user;
     }
 
-    protected function enableModules(string ...$modules): void
+    protected function installModules(string ...$modules): void
     {
         foreach ($modules as $module) {
-            app(ModuleManager::class)->enable($module);
+            app(ModuleManager::class)->install($module);
         }
     }
 }

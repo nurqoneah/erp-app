@@ -2,6 +2,7 @@
 
 namespace Modules\Product\Models;
 
+use App\Core\Extensions\Extensible;
 use App\Core\Models\Concerns\HasAudit;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 #[UseFactory(ProductFactory::class)]
 class Product extends Model
 {
-    use HasAudit, HasFactory, SoftDeletes;
+    use Extensible, HasAudit, HasFactory, SoftDeletes;
 
     /** Barang yang stoknya dilacak. */
     public const TYPE_STORABLE = 'storable';

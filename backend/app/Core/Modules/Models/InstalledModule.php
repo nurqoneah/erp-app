@@ -11,10 +11,14 @@ class InstalledModule extends Model
 {
     protected $table = 'modules';
 
-    protected $fillable = ['name', 'version', 'enabled'];
+    public const STATE_INSTALLED = 'installed';
+
+    public const STATE_UNINSTALLED = 'uninstalled';
+
+    protected $fillable = ['name', 'state', 'installed_version', 'installed_at'];
 
     protected function casts(): array
     {
-        return ['enabled' => 'boolean'];
+        return ['installed_at' => 'datetime'];
     }
 }

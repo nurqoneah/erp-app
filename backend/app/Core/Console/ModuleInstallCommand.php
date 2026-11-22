@@ -6,20 +6,20 @@ use App\Core\Modules\ModuleManager;
 use Illuminate\Console\Command;
 use RuntimeException;
 
-class ModuleEnableCommand extends Command
+class ModuleInstallCommand extends Command
 {
-    protected $signature = 'module:enable {module* : Nama modul, mis. Sales}';
+    protected $signature = 'module:install {module* : Nama modul, mis. Sales}';
 
-    protected $description = 'Aktifkan modul beserta dependensinya';
+    protected $description = 'Install modul beserta dependensinya (jalankan migration & data awal)';
 
     public function handle(ModuleManager $modules): int
     {
         try {
             foreach ($this->argument('module') as $name) {
-                $activated = $modules->enable($name);
-                $this->components->info($activated
-                    ? 'Diaktifkan: '.implode(', ', $activated)
-                    : "Modul [{$name}] sudah aktif.");
+                $installed = $modules->install($name);
+                $this->components->info($installed
+                    ? 'Terpasang: '.implode(', ', $installed)
+                    : "Modul [{$name}] sudah terpasang.");
             }
         } catch (RuntimeException $e) {
             $this->components->error($e->getMessage());

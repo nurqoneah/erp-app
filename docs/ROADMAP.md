@@ -13,6 +13,12 @@
 - [x] Product (kategori, UoM)
 - [x] Pesan validasi Bahasa Indonesia
 
+## Fase 1.5 — Sistem App ala Odoo ✅
+- [x] Install / upgrade / uninstall modul (uninstall menghapus data permanen, dependensi ikut)
+- [x] Migration modul hanya dijalankan saat install / upgrade
+- [x] Perluasan antar modul: field model, validasi, API, dan slot form frontend
+- [x] Contoh modul kustom "Keanggotaan" + panduan `docs/MODULES.md`
+
 ## Fase 2 — Operasional
 - [ ] Inventory (gudang, lokasi, stock move, stok)
 - [ ] Sales (quotation, SO, delivery, invoice)

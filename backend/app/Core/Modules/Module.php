@@ -11,6 +11,7 @@ final class Module
      * @param  list<string>  $depends
      * @param  list<array{label: string, path: string, permission?: string|null}>  $menu
      * @param  list<class-string>  $seeders
+     * @param  list<class-string<ModuleProvider>>  $providers  dijalankan hanya bila modul terpasang
      */
     public function __construct(
         public readonly string $name,
@@ -26,6 +27,9 @@ final class Module
         public readonly array $menu,
         public readonly string $path,
         public readonly array $seeders = [],
+        public readonly array $providers = [],
+        public readonly string $author = '',
+        public readonly string $category = '',
     ) {}
 
     public static function fromManifest(string $path): self
@@ -48,6 +52,9 @@ final class Module
             menu: array_values($manifest['menu'] ?? []),
             path: $path,
             seeders: array_values($manifest['seeders'] ?? []),
+            providers: array_values($manifest['providers'] ?? []),
+            author: $manifest['author'] ?? '',
+            category: $manifest['category'] ?? '',
         );
     }
 
